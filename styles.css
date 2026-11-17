@@ -87,6 +87,14 @@ main{padding:0 clamp(16px,4vw,50px) 24px}
 .details{margin-top:11px;border-top:1px solid var(--line);padding-top:10px}
 .details summary{font-size:12px;font-weight:800;color:var(--green);cursor:pointer}
 .details p{color:#75645b;line-height:1.8}
+.history-context{margin-top:10px!important;max-width:700px;color:#756754!important;line-height:1.85!important;background:#f8efe2;border-left:3px solid #bc936b;border-radius:0 10px 10px 0;padding:10px 13px}
+.details .history-intro{font-size:12px;color:#765f51;line-height:1.85;margin:12px 0}
+.details .history-title{font-size:14px;font-weight:800;color:var(--green-dark);margin:18px 0 9px;padding-left:11px;border-left:3px solid var(--gold)}
+.details .history-paragraph{font-size:13px;line-height:1.95;color:#514940;letter-spacing:.005em;margin:0 0 13px}
+.history-source{border-top:1px dashed #e7d8c9;padding-top:12px;margin-top:6px}
+.history-source-link{display:inline-flex;align-items:center;min-height:38px;text-decoration:none;border-radius:10px;background:#f8f0e4;border:1px solid #e6d6c2;padding:8px 12px;color:var(--green-dark);font-size:11px;font-weight:700}
+.history-source-link:hover{text-decoration:underline;background:#f1e6d6}
+
 .stop-actions{display:flex;gap:10px;margin-top:11px}
 .small-link{font-size:12px;text-decoration:none;font-weight:700;border-radius:9px;border:1px solid #dfceb9;background:#fff8ee;padding:7px 11px;color:var(--green-dark)}
 .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:11px}
