@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#122f48">
+  <meta name="description" content="2026 北海道家庭白色聖誕之旅｜五福旅遊 12/22–12/26">
+  <title>北海道白色聖誕｜家庭旅遊手冊</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="masthead">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">✳</span><span>HOKKAIDO <strong>2026</strong></span></div>
+      <span class="top-pill">家庭旅行手冊</span>
+    </header>
+
+    <main id="main">
+      <section class="view active" id="view-home" aria-labelledby="home-heading">
+        <div class="hero">
+          <div class="snowflake snowflake-a" aria-hidden="true">✻</div>
+          <div class="snowflake snowflake-b" aria-hidden="true">✧</div>
+          <div class="snowflake snowflake-c" aria-hidden="true">✻</div>
+          <div class="hero-content">
+            <span class="eyebrow">FAMILY CHRISTMAS TRIP · HOKKAIDO</span>
+            <h1 id="home-heading">北海道<br>白色聖誕之旅</h1>
+            <p>2026.12.22 — 12.26 <span class="dot">·</span> 五天四夜</p>
+          </div>
+          <svg class="mountains" viewBox="0 0 500 150" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><path d="M0 128 L64 64 98 96 158 31 223 101 269 60 326 125 377 56 426 100 465 70 500 114 V150 H0Z" fill="#315675"/><path d="M0 141 L94 98 137 129 200 64 274 145 346 89 418 132 500 81 V150H0Z" fill="#5d8099"/><path d="M0 149 L96 117 144 139 216 111 295 146 376 118 451 140 500 128 V150H0Z" fill="#ecf2f4"/></svg>
+        </div>
+
+        <div class="summary-grid">
+          <article class="stat"><span class="stat-label">旅程狀態</span><strong id="trip-status">出發倒數</strong><small id="trip-countdown">載入中</small></article>
+          <article class="stat"><span class="stat-label">去程航班</span><strong>IT260</strong><small>12/22　08:00 高雄起飛</small></article>
+        </div>
+
+        <div class="section-heading"><div><span class="kicker">TODAY'S GUIDE</span><h2 id="today-heading">出發前提醒</h2></div><span class="subtle" id="japan-clock"></span></div>
+        <div class="card" id="today-card"></div>
+
+        <div class="section-heading"><div><span class="kicker">SHORTCUTS</span><h2>常用工具</h2></div></div>
+        <div class="shortcut-grid">
+          <button class="shortcut" type="button" data-goto="shopping"><span class="shortcut-icon">¥</span><strong>日圓換算</strong><small>匯率與購物</small></button>
+          <button class="shortcut" type="button" data-goto="checklist"><span class="shortcut-icon">✓</span><strong>行前清單</strong><small>整理必帶物品</small></button>
+          <button class="shortcut" type="button" data-goto="itinerary"><span class="shortcut-icon">⌖</span><strong>五天行程</strong><small>景點故事與導航</small></button>
+          <button class="shortcut" type="button" data-goto="info"><span class="shortcut-icon">✈</span><strong>航班資訊</strong><small>行李與聯絡資料</small></button>
+        </div>
+        <p class="notice note-warn">提醒：函館聖誕活動、洞爺湖燈光隧道及札幌聖誕市集為「時間許可自由前往」，不是旅行社保證參觀的景點。</p>
+      </section>
+
+      <section class="view" id="view-itinerary" aria-labelledby="itinerary-heading" hidden>
+        <div class="page-head"><span class="kicker">YOUR JOURNEY</span><h1 id="itinerary-heading">五天行程</h1><p>依五福 2026/11/5 最終行程表整理；保留原始景點順序。</p></div>
+        <div class="day-tabs" id="day-tabs" role="tablist" aria-label="選擇旅遊日期"></div>
+        <div id="day-overview"></div>
+        <div id="stop-list" class="stop-list"></div>
+        <p class="notice">出團前與旅途中仍可能因天候、交通調整順序；網站沒有填寫未經確認的集合時間。</p>
+      </section>
+
+      <section class="view" id="view-shopping" aria-labelledby="shopping-heading" hidden>
+        <div class="page-head"><span class="kicker">SHOPPING TOOLS</span><h1 id="shopping-heading">換匯與購物</h1><p>先快速看價格，再記下想買或已買的商品。</p></div>
+        <section class="card" aria-labelledby="fx-heading">
+          <div class="card-top"><h2 id="fx-heading">日圓換算器</h2><button id="rate-refresh" class="text-button" type="button">更新匯率</button></div>
+          <label for="currency-direction" class="field-label">換算方向</label>
+          <select id="currency-direction"><option value="jpy">日圓 → 台幣</option><option value="twd">台幣 → 日圓</option></select>
+          <div class="two-fields">
+            <div><label class="field-label" for="fx-amount">輸入金額</label><input id="fx-amount" type="number" min="0" inputmode="decimal" value="3500"></div>
+            <div><label class="field-label" for="fx-rate">1 日圓 = 台幣</label><input id="fx-rate" type="number" min="0" step="0.000001" inputmode="decimal" placeholder="載入匯率中"></div>
+          </div>
+          <div class="conversion"><small id="fx-output-label">預估台幣</small><strong id="fx-output">—</strong><span id="fx-status">讀取參考匯率中…</span></div>
+          <p class="fineprint">參考匯率來自 Frankfurter，非銀行實際成交價；可自行修改匯率。此版本不計入信用卡海外手續費。</p>
+        </section>
+        <section class="card" aria-labelledby="add-shopping-heading">
+          <h2 id="add-shopping-heading">新增購物紀錄</h2>
+          <form id="expense-form">
+            <label class="field-label" for="expense-name">商品名稱</label><input id="expense-name" required maxlength="80" placeholder="例如：小樽音樂盒">
+            <div class="two-fields">
+              <div><label class="field-label" for="expense-yen">日圓金額</label><input id="expense-yen" required type="number" min="1" max="10000000" step="1" inputmode="numeric" placeholder="3500"></div>
+              <div><label class="field-label" for="expense-buyer">購買者</label><select id="expense-buyer"><option>爸爸</option><option>媽媽</option><option>孩子</option></select></div>
+            </div>
+            <button class="primary" type="submit">儲存購物紀錄</button>
+          </form>
+          <div id="expense-message" class="form-message" role="status" aria-live="polite"></div>
+        </section>
+        <section class="card"><div class="card-top"><h2>購物紀錄</h2><strong id="expense-total" class="inline-total">NT$0</strong></div><div id="expense-list"></div></section>
+        <section class="card" aria-labelledby="wishlist-heading">
+          <h2 id="wishlist-heading">伴手禮想買清單</h2>
+          <form id="wish-form" class="inline-form"><input id="wish-name" required maxlength="80" placeholder="例如：札幌聖誕紀念杯" aria-label="想買的商品名稱"><button class="primary" type="submit">新增</button></form>
+          <div id="wish-list"></div>
+        </section>
+        <p class="notice note-warn">目前是前端試用版：購物和清單僅保存在「這台裝置」的瀏覽器，尚未同步到 Google Sheets，請不要當成全家共用資料庫。</p>
+      </section>
+
+      <section class="view" id="view-checklist" aria-labelledby="checklist-heading" hidden>
+        <div class="page-head"><span class="kicker">FAMILY CHECKLIST</span><h1 id="checklist-heading">家庭準備清單</h1><p>先完成必要準備，再整理每個人的行李。</p></div>
+        <div class="card">
+          <div class="card-top"><h2>行前待辦</h2><span id="check-progress" class="small-pill"></span></div>
+          <div class="progress-track"><div id="progress-bar" class="progress-fill"></div></div>
+          <div id="check-list"></div>
+        </div>
+        <div class="card">
+          <h2>新增待辦事項</h2>
+          <form id="check-form" class="inline-form"><input id="check-name" required maxlength="100" placeholder="例如：購買防水手套" aria-label="待辦事項"><button class="primary" type="submit">新增</button></form>
+        </div>
+        <p class="notice">此版清單只保存在目前手機或電腦；正式家庭同步功能將在 Google Sheets 串接後啟用。</p>
+      </section>
+
+      <section class="view" id="view-info" aria-labelledby="info-heading" hidden>
+        <div class="page-head"><span class="kicker">TRIP ESSENTIALS</span><h1 id="info-heading">重要資訊</h1><p>航班、行李、住宿、領隊與常用日文集中查看。</p></div>
+        <div class="card"><h2>航班資訊</h2>
+          <div class="flight-card"><div><small>12/22（二）· 去程</small><strong>KHH <span>→</span> CTS</strong><p>台灣虎航 IT260｜08:00 — 12:55</p></div><span class="flight-tag">去程</span></div>
+          <div class="flight-card"><div><small>12/26（六）· 回程</small><strong>CTS <span>→</span> KHH</strong><p>台灣虎航 IT261｜13:55 — 18:05</p></div><span class="flight-tag">回程</span></div>
+          <p class="fineprint">時間依五福 2026/11/5 行程表；最終以旅行社及航空公司通知為準。台日有一小時時差。</p>
+        </div>
+        <div class="card"><h2>行李與餐食</h2><div class="fact-grid">
+          <div><small>託運行李</small><strong>20 kg／每人每程</strong></div><div><small>手提行李</small><strong>合計 10 kg</strong></div><div><small>機上餐</small><strong>團票包含</strong></div><div><small>領隊小費</small><strong>NT$300／人／天</strong></div>
+        </div></div>
+        <div class="card"><h2>飯店與領隊</h2><p class="subtext">四晚飯店尚未確認最終入住名單。領隊姓名、電話、集合時間與地點目前尚未提供，收到正式通知後更新。</p><div class="pending"><span>飯店確認</span><strong>待通知</strong></div><div class="pending"><span>領隊資訊</span><strong>尚未提供</strong></div><div class="pending"><span>集合時間／地點</span><strong>待通知</strong></div></div>
+        <div class="card"><h2>旅行日語小卡</h2><div class="phrase"><strong>これはいくらですか？</strong><span>請問這個多少錢？</span></div><div class="phrase"><strong>トイレはどこですか？</strong><span>洗手間在哪裡？</span></div><div class="phrase"><strong>ありがとうございます。</strong><span>謝謝您。</span></div></div>
+        <div class="card"><h2>緊急資訊與相簿</h2><div class="pending"><span>日本警察</span><a href="tel:110">110</a></div><div class="pending"><span>日本救護／消防</span><a href="tel:119">119</a></div><div class="pending"><span>Google Drive 家庭相簿</span><strong>連結待設定</strong></div><p class="fineprint">護照號碼、密碼與完整保單資訊不放入公開網站。</p></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="主要導覽">
+      <button type="button" class="nav-button selected" data-nav="home" aria-current="page"><span class="nav-icon">⌂</span>今日</button>
+      <button type="button" class="nav-button" data-nav="itinerary"><span class="nav-icon">⌖</span>行程</button>
+      <button type="button" class="nav-button" data-nav="shopping"><span class="nav-icon">¥</span>購物</button>
+      <button type="button" class="nav-button" data-nav="checklist"><span class="nav-icon">☑</span>清單</button>
+      <button type="button" class="nav-button" data-nav="info"><span class="nav-icon">ⓘ</span>資訊</button>
+    </nav>
+    <footer>五福旅遊 CTS05IT26D22K01 · 家庭自用非旅行社官方網站 · <a href="./PROJECT_SPEC.md">規格文件</a></footer>
+  </div>
+</body>
+</html>
