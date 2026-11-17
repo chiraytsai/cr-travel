@@ -66,8 +66,18 @@ function showView(view){
   });
   window.scrollTo({top:0,behavior:'instant'});
 }
+// 購物與家庭清單使用已部署的 Apps Script 共用頁；本機試用資料不會自動刪除。
+const SHARED_TOOLS_URL = 'https://script.google.com/macros/s/AKfycbwfhlvYpPWT7OZTVBrjwoQDpYWectfkbkKCW1piexibls4K-GdhJBHNhVcFa5JEKSzxOg/exec';
 document.querySelectorAll('[data-nav],[data-goto]').forEach(function(b){
-  b.addEventListener('click',function(){showView(b.dataset.nav||b.dataset.goto);});
+  b.addEventListener('click',function(){
+    const view=b.dataset.nav||b.dataset.goto;
+    if(view==='shopping'||view==='checklist'){
+      // 由家人共用網頁讀寫 Google Sheets，避免操作瀏覽器本機示範資料。
+      window.location.assign(SHARED_TOOLS_URL);
+      return;
+    }
+    showView(view);
+  });
 });
 function renderHome(){
   const today=todayJapan(),diff=dayDiff('2026-12-22',today),tripIndex=dayDiff(today,'2026-12-22');
