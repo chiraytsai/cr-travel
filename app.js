@@ -1,5 +1,5 @@
 'use strict';
-/* 北海道家庭旅行網站｜前端試用版。購物與清單僅寫入此裝置 localStorage。 */
+/* 白色聖誕・溫暖旅程｜純靜態旅行網站，行前清單與匯率偏好僅存本機。 */
 const DAYS = [
   {date:'2026-12-22',weekday:'週二',label:'登別・溫泉',subtitle:'高雄飛往新千歲，走進火山與溫泉鄉',stops:[
     {name:'高雄小港機場 → 新千歲機場',status:'安排',brief:'台灣虎航 IT260，08:00 起飛、12:55 抵達（各地當地時間）。',story:'台灣與日本時差一小時，日本時間比台灣快一小時。',map:'新千歲機場'},
@@ -22,7 +22,7 @@ const DAYS = [
   ]},
   {date:'2026-12-25',weekday:'週五',label:'小樽・札幌',subtitle:'聖誕節逛小樽與札幌，晚餐自由安排',stops:[
     {name:'SAIRO 展望台',status:'安排',brief:'俯瞰洞爺湖與中島；雪霧可能影響能見度。',story:'這裡可從高處觀察洞爺湖的火山地形與湖心島嶼。',map:'洞爺湖 SAIRO 展望台'},
-    {name:'免稅店',status:'安排',brief:'團體安排的自由購物站，可依需要購物。',story:'比價時可先用購物頁換算日圓與台幣。',map:'北海道免稅店'},
+    {name:'免稅店',status:'安排',brief:'團體安排的自由購物站，可依需要購物。',story:'比價時可先用工具頁換算日圓與台幣。',map:'北海道免稅店'},
     {name:'小樽運河',status:'僅途經',brief:'旅行社行程寫「途經」，未保證下車拍照。',story:'小樽曾是北海道的重要商港，沿岸老倉庫保留了昔日的港口風貌。',map:'小樽運河'},
     {name:'小樽音樂盒堂・北一硝子館',status:'安排',brief:'挑選音樂盒與玻璃工藝品，易碎物品應妥善包裝。',story:'小樽因港口貿易與工藝發展而聞名，音樂盒與玻璃製品如今是地方紀念品代表。',map:'小樽音樂盒堂'},
     {name:'小樽甜點巡禮',status:'安排',brief:'北菓樓泡芙、六花亭、LeTAO；泡芙缺貨時改贈等值甜點。',story:'北海道乳製品資源與甜點工藝讓小樽成為知名甜點城市。',map:'小樽 LeTAO'},
@@ -35,17 +35,29 @@ const DAYS = [
   ]}
 ];
 const CHECK_DEFAULT = ['確認三人的護照與機票姓名','確認飯店及三人房安排','確認領隊資料與集合位置','準備防滑防水鞋與保暖外套','準備手套、毛帽、保暖襪','確認旅遊保險及常用藥','準備手機網路、充電器、行動電源','辦理 Visit Japan Web','備妥日圓現金與付款卡片','確認 12/23 函館聖誕活動時間','確認 12/25 札幌市集自由活動時間'];
-const STORE_KEY = 'hokkaido-trip-demo-v1';
+// 只保留本機行前清單與參考匯率；不再存取舊版購物紀錄／伴手禮資料。
+const STORE_KEY = 'hokkaido-trip-tools-v2';
+const LEGACY_STORE_KEY = 'hokkaido-trip-demo-v1';
 function loadStore(){
   try {
-    const data=JSON.parse(localStorage.getItem(STORE_KEY)||'null');
-    if(data&&Array.isArray(data.expenses)&&Array.isArray(data.wishes)&&Array.isArray(data.checks))return data;
+    const raw=localStorage.getItem(STORE_KEY)||localStorage.getItem(LEGACY_STORE_KEY);
+    const data=raw?JSON.parse(raw):null;
+    if(data&&Array.isArray(data.checks)){
+      return {
+        checks:data.checks.filter(function(x){return x&&typeof x.text==='string';}).map(function(x){return {id:x.id,text:x.text,done:x.done===true};}),
+        rate:typeof data.rate==='number'&&Number.isFinite(data.rate)&&data.rate>0?data.rate:null,
+        rateDate:String(data.rateDate||'')
+      };
+    }
   }catch(e){}
-  return {expenses:[],wishes:[],checks:CHECK_DEFAULT.map(function(t,i){return {id:i+1,text:t,done:false};}),rate:null,rateDate:''};
+  return {checks:CHECK_DEFAULT.map(function(t,i){return {id:i+1,text:t,done:false};}),rate:null,rateDate:''};
 }
 const state=loadStore();
 let activeDay=0;
-function persist(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state));return true;}catch(e){return false;}}
+function persist(){
+  try {localStorage.setItem(STORE_KEY,JSON.stringify({checks:state.checks,rate:state.rate,rateDate:state.rateDate}));return true;}
+  catch(e){return false;}
+}
 function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node;}
 function fmt(value){return Math.round(Number(value)||0).toLocaleString('zh-TW');}
 function todayJapan(){
@@ -55,7 +67,7 @@ function todayJapan(){
 }
 function dayDiff(a,b){return Math.round((Date.parse(a+'T00:00:00Z')-Date.parse(b+'T00:00:00Z'))/86400000);}
 function showView(view){
-  ['home','itinerary','shopping','checklist','info'].forEach(function(v){
+  ['home','itinerary','tools','checklist','info'].forEach(function(v){
     const selected=v===view;
     const section=document.getElementById('view-'+v);
     section.hidden=!selected;
@@ -66,10 +78,14 @@ function showView(view){
   });
   window.scrollTo({top:0,behavior:'instant'});
 }
-// 五大頁面均在 GitHub Pages 本站切換；個人購物與清單僅儲存於本機瀏覽器。
+// 五大頁面均在 GitHub Pages 站內切換，不連接任何雲端資料庫。
 document.querySelectorAll('[data-nav],[data-goto]').forEach(function(b){
   b.addEventListener('click',function(){
     showView(b.dataset.nav||b.dataset.goto);
+    if(b.dataset.tool){
+      const section=document.getElementById(b.dataset.tool);
+      if(section)requestAnimationFrame(function(){section.scrollIntoView({behavior:'smooth',block:'start'});});
+    }
   });
 });
 function renderHome(){
@@ -156,65 +172,44 @@ document.getElementById('fx-rate').addEventListener('input',function(){
   setFxStatus('手動設定匯率 · 非即時報價');updateFx();
 });
 document.getElementById('rate-refresh').addEventListener('click',fetchRate);
-function showExpenseMessage(message){document.getElementById('expense-message').textContent=message;}
-document.getElementById('expense-form').addEventListener('submit',function(event){
-  event.preventDefault();
-  const name=document.getElementById('expense-name').value.trim(),yen=Number(document.getElementById('expense-yen').value),rate=rateNumber();
-  const buyer=document.getElementById('expense-buyer').value;
-  if(!name||!Number.isInteger(yen)||yen<1||yen>10000000){showExpenseMessage('請輸入商品名稱與有效的整數日圓金額。');return;}
-  if(!rate){showExpenseMessage('請先取得或手動輸入有效匯率，才能記錄台幣估算。');return;}
-  const old=JSON.stringify(state.expenses);
-  state.expenses.unshift({id:Date.now()+'-'+Math.random().toString(36).slice(2,8),name:name,yen:yen,buyer:buyer,rate:rate,twd:Math.round(yen*rate),date:todayJapan()});
-  if(!persist()){state.expenses=JSON.parse(old);showExpenseMessage('此裝置無法保存資料，請檢查瀏覽器儲存設定。');return;}
-  event.target.reset();renderExpenses();showExpenseMessage('已儲存在此裝置，尚未同步給其他家人。');
+// 翻譯卡片只顯示靜態日語，無需第三方翻譯 API 或帳號。
+const phraseDialog=document.getElementById('phrase-dialog');
+let activePhrase='';
+document.querySelectorAll('.phrase-button').forEach(function(button){
+  button.addEventListener('click',function(){
+    activePhrase=button.dataset.jp||'';
+    document.getElementById('phrase-dialog-jp').textContent=activePhrase;
+    document.getElementById('phrase-dialog-zh').textContent=button.dataset.zh||'';
+    document.getElementById('phrase-copy-status').textContent='';
+    if(typeof phraseDialog.showModal==='function')phraseDialog.showModal();
+    else phraseDialog.setAttribute('open','');
+  });
 });
-function renderExpenses(){
-  const root=document.getElementById('expense-list');root.replaceChildren();
-  const total=state.expenses.reduce(function(sum,item){return sum+(Number(item.twd)||0);},0);
-  document.getElementById('expense-total').textContent='NT$'+fmt(total);
-  if(!state.expenses.length){root.append(el('p','subtext','尚無購物紀錄。'));return;}
-  state.expenses.forEach(function(item){
-    const row=el('div','entry'),left=el('div','');
-    left.append(el('strong','',item.name),el('small','',item.buyer+' · '+item.date+' · ¥'+fmt(item.yen)));
-    const right=el('div','entry-side');
-    right.append(el('strong','','NT$'+fmt(item.twd)));
-    const btn=el('button','delete-btn','移除');btn.type='button';
-    btn.addEventListener('click',function(){
-      if(!confirm('確定刪除此裝置上的購物紀錄？'))return;
-      const old=state.expenses.slice();state.expenses=state.expenses.filter(function(x){return x.id!==item.id;});
-      if(!persist()){state.expenses=old;alert('儲存失敗，沒有刪除紀錄。');return;}
-      renderExpenses();
-    });
-    right.append(btn);row.append(left,right);root.append(row);
+phraseDialog.addEventListener('click',function(event){
+  if(event.target===phraseDialog)phraseDialog.close();
+});
+document.getElementById('phrase-copy').addEventListener('click',async function(){
+  const label=document.getElementById('phrase-copy-status');
+  try {
+    if(!navigator.clipboard||!navigator.clipboard.writeText)throw new Error('clipboard not available');
+    await navigator.clipboard.writeText(activePhrase);
+    label.textContent='已複製日文';
+  }catch(e){
+    label.textContent='無法自動複製，請長按上方日文文字進行複製。';
+  }
+});
+// 用裝置時間分別換算日本與台灣時區，不要求定位權限。
+function updateClocks(){
+  const now=new Date(),timeFormat={hour:'2-digit',minute:'2-digit',hour12:false};
+  ['jp','tw'].forEach(function(code){
+    const zone=code==='jp'?'Asia/Tokyo':'Asia/Taipei';
+    document.getElementById('time-'+code).textContent=new Intl.DateTimeFormat('zh-TW',{...timeFormat,timeZone:zone}).format(now);
+    document.getElementById('date-'+code).textContent=new Intl.DateTimeFormat('zh-TW',{timeZone:zone,month:'2-digit',day:'2-digit',weekday:'short'}).format(now);
   });
 }
-document.getElementById('wish-form').addEventListener('submit',function(e){
-  e.preventDefault();const input=document.getElementById('wish-name'),name=input.value.trim();if(!name)return;
-  const old=state.wishes.slice();
-  state.wishes.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,5),name:name,done:false});
-  if(!persist()){state.wishes=old;alert('無法保存想買清單。');return;}
-  input.value='';renderWishes();
-});
-function renderWishes(){
-  const root=document.getElementById('wish-list');root.replaceChildren();
-  if(!state.wishes.length){root.append(el('p','subtext','還沒新增想買的伴手禮。'));return;}
-  state.wishes.forEach(function(item){
-    const row=el('div','entry'),left=el('div','');
-    left.append(el('strong','',item.name),el('small','',item.done?'已購買':'尚未購買'));
-    const btn=el('button','text-button',item.done?'取消標記':'買好了');
-    btn.type='button';btn.addEventListener('click',function(){
-      item.done=!item.done;persist();renderWishes();
-      if(item.done){
-        document.getElementById('expense-name').value=item.name;
-        showExpenseMessage('已帶入商品名稱；請輸入日圓金額後另行儲存購物紀錄。');
-      }
-    });
-    const del=el('button','delete-btn','刪除');del.type='button';
-    del.addEventListener('click',function(){state.wishes=state.wishes.filter(function(x){return x.id!==item.id;});persist();renderWishes();});
-    const actions=el('div','entry-side');actions.append(btn,el('span','',' · '),del);
-    row.append(left,actions);root.append(row);
-  });
-}
+updateClocks();
+setInterval(updateClocks,30000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)updateClocks();});
 document.getElementById('check-form').addEventListener('submit',function(event){
   event.preventDefault();const input=document.getElementById('check-name'),name=input.value.trim();if(!name)return;
   const old=state.checks.slice();
@@ -239,4 +234,4 @@ function renderChecks(){
   });
 }
 if(state.rate){document.getElementById('fx-rate').value=Number(state.rate).toFixed(6);setFxStatus('上次儲存匯率 · '+(state.rateDate||'日期不明'));}
-renderHome();renderItinerary();renderExpenses();renderWishes();renderChecks();updateFx();fetchRate();
+renderHome();renderItinerary();renderChecks();updateFx();fetchRate();
