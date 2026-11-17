@@ -140,7 +140,8 @@
     }
     function server(name,args){
       return new Promise(function(resolve,reject){
-        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject)[name].apply(null,args||[]);
+        const runner=google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);
+        runner[name].apply(runner,args||[]);
       });
     }
     function busy(value){
