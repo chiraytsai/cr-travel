@@ -2,47 +2,37 @@
 
 五福旅行團：`CTS05IT26D22K01`  
 日期：2026-12-22 至 2026-12-26  
-狀態：**GitHub Pages 已連接 Apps Script；購物紀錄跨手機同步已通過實測**
+版本：**純靜態 GitHub Pages（無 Google Sheets／Apps Script／雲端資料庫串接）**
 
 ## 網站內容
 
-- 今日：旅行倒數、當日重點、快速入口。
-- 行程：五天景點、背景故事、旅遊提醒、Google Maps 導航。
-- 購物：JPY/TWD 換算（Frankfurter 參考匯率）、購物記錄、想買清單。
-- 清單：出發前準備與家庭待辦。
-- 資訊：虎航航班、行李額度、飯店與領隊待確認項、日語小卡。
+- **今日**：旅行倒數、當日行程重點、快速入口。
+- **行程**：五天景點、背景故事、旅遊提醒及 Google Maps 導航。
+- **購物**：日圓／台幣參考匯率與換算、本機購物紀錄、伴手禮想買清單。
+- **清單**：本機行李準備與待辦勾選。
+- **資訊**：虎航航班、行李規定、飯店與領隊待確認項目、日語小卡。
 
-### 重要限制
-- 主選單「購物」與「清單」現在開啟 Google Apps Script 雲端共用工具；主站原本的瀏覽器 `localStorage` 試用紀錄不會自動搬到 Google Sheets，也不會自動刪除。
-- 讀取不到 Frankfurter 匯率時可以手動輸入，請確認資料日期。參考匯率不是銀行實際成交價。
-- 飯店、領隊、集合時刻尚未確定。函館聖誕點燈、洞爺湖燈光隧道與札幌聖誕市集屬自由前往，不能當成旅行社保證項目。
-- Google Drive 相簿連結尚未設定。
-- 旅遊網站是**公開靜態頁面**，請勿上傳帳號密碼、護照號碼、完整保單等敏感資訊。
+## 已取消的雲端資料庫功能
 
-## GitHub Pages 發布
+- GitHub Pages 內的「購物」及「清單」不再跳轉到 Google Apps Script。
+- 不使用 Google Sheets、Firebase 或其他雲端資料庫進行多人同步。
+- 購物、想買清單、待辦改由**各裝置瀏覽器 `localStorage` 個別保存**；這些資料不會跨手機同步。
+- 網站原有本機紀錄不會被此次更新刪除。此前儲存在 Google Sheets 的雲端紀錄**不會自動匯入本機，也沒有被刪除**。
+- 已自公開 GitHub 專案移除不再使用的 Apps Script 程式檔；**已部署的 Google Apps Script 網頁應用程式仍須由擁有者到 Apps Script 後台手動停用**，本次 GitHub 變更無法將它下架。
 
-1. 進入此儲存庫的 **Settings → Pages**。
-2. 在 **Build and deployment** 設為 **Deploy from a branch**。
-3. 選擇 **main**、**/(root)**，按 **Save**。
-4. GitHub 建置成功後，從 Pages 設定頁面的實際網址開啟網站。
+## 重要限制
 
-## 下一階段
+- 手機清除網站資料、使用無痕模式、變更瀏覽器或換機時，本機紀錄可能無法保留。
+- Frankfurter 僅提供參考匯率，並非實際銀行成交價；讀取失敗可手動設定。
+- 飯店、領隊、集合時刻尚未確定。函館聖誕點燈、洞爺湖燈光隧道與札幌聖誕市集屬自由前往，不是旅行社保證行程。
+- Google Drive 旅遊相簿連結尚未設定，僅作為外部相簿連結，不涉及資料庫。
+- 網站公開，請勿加入護照號碼、帳號密碼、完整保單等敏感資料。
+- 不提供「支出性質」、代墊或分帳功能。
 
-- 實機檢查行程與手機版介面。
-- 已完成購物新增與跨手機讀取驗收；接續驗證待辦勾選、購物修改與軟刪除後另一支手機是否同步。
-- 設定 Drive 相簿及領隊／飯店資訊。
-- 加入最小限度的輸入驗證與資料備份。
+## GitHub Pages
+
+部署來源為 `main` 分支根目錄；靜態網站入口：
+
+https://chiraytsai.github.io/cr-travel/
 
 詳見 [PROJECT_SPEC.md](PROJECT_SPEC.md)。
-
-
-## Google Sheets 共用模組（已部署，持續驗收）
-
-- 後端：[`apps-script/Code.gs`](apps-script/Code.gs)
-- 共用網頁：[`apps-script/Index.html`](apps-script/Index.html)
-- **安裝步驟與雙手機測試：[`apps-script/DEPLOY.md`](apps-script/DEPLOY.md)**
-
-以上程式已提交 GitHub，使用既有的 Google Sheets 資料庫：
-[北海道家庭旅遊共用資料庫](https://docs.google.com/spreadsheets/d/1Bt8Tyz0pdofJpRpIIRUFvhhC8IQxT2GDHbISiAUTfXk/edit)。
-
-已通過程式語法與模擬資料讀寫測試，使用者已部署 Apps Script，GitHub 主站的「購物／清單」入口已改至雲端頁面。**2026-11-17 使用者確認同一筆購物紀錄在第二支手機可見，且已核對試算表 `Expenses` 存在相應紀錄。** 待辦勾選、修改與軟刪除仍待跨裝置驗收。雲端頁面的初始分頁是「購物紀錄」，若要查看待辦請再選「家庭待辦」。
