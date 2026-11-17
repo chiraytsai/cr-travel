@@ -34,3 +34,15 @@
 - 加入最小限度的輸入驗證與資料備份。
 
 詳見 [PROJECT_SPEC.md](PROJECT_SPEC.md)。
+
+
+## 已完成的 Google Sheets 共用模組（尚待本人部署）
+
+- 後端：[`apps-script/Code.gs`](apps-script/Code.gs)
+- 共用網頁：[`apps-script/Index.html`](apps-script/Index.html)
+- **安裝步驟與雙手機測試：[`apps-script/DEPLOY.md`](apps-script/DEPLOY.md)**
+
+以上程式已提交 GitHub，使用既有的 Google Sheets 資料庫：
+[北海道家庭旅遊共用資料庫](https://docs.google.com/spreadsheets/d/1Bt8Tyz0pdofJpRpIIRUFvhhC8IQxT2GDHbISiAUTfXk/edit)。
+
+已通過程式語法與模擬資料讀寫測試；尚未部署 Apps Script，未在真實 Google 服務上驗收。**原本 GitHub Pages 的購物／清單功能仍是本機儲存版**。請先部署並取得 `/exec` 網址後，再修改主網站連結，避免未完成的資料同步誤導家人。
