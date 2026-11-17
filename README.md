@@ -2,7 +2,7 @@
 
 五福旅行團：`CTS05IT26D22K01`  
 日期：2026-12-22 至 2026-12-26  
-狀態：**GitHub Pages 主站已串接 Apps Script 共用工具入口；跨裝置同步尚待實機驗收**
+狀態：**GitHub Pages 已連接 Apps Script；購物紀錄跨手機同步已通過實測**
 
 ## 網站內容
 
@@ -29,14 +29,14 @@
 ## 下一階段
 
 - 實機檢查行程與手機版介面。
-- 驗證 Google Apps Script 網頁實際存取及跨裝置購物／待辦同步，排除任何權限或部署錯誤。
+- 已完成購物新增與跨手機讀取驗收；接續驗證待辦勾選、購物修改與軟刪除後另一支手機是否同步。
 - 設定 Drive 相簿及領隊／飯店資訊。
 - 加入最小限度的輸入驗證與資料備份。
 
 詳見 [PROJECT_SPEC.md](PROJECT_SPEC.md)。
 
 
-## 已完成的 Google Sheets 共用模組（尚待本人部署）
+## Google Sheets 共用模組（已部署，持續驗收）
 
 - 後端：[`apps-script/Code.gs`](apps-script/Code.gs)
 - 共用網頁：[`apps-script/Index.html`](apps-script/Index.html)
@@ -45,4 +45,4 @@
 以上程式已提交 GitHub，使用既有的 Google Sheets 資料庫：
 [北海道家庭旅遊共用資料庫](https://docs.google.com/spreadsheets/d/1Bt8Tyz0pdofJpRpIIRUFvhhC8IQxT2GDHbISiAUTfXk/edit)。
 
-已通過程式語法與模擬資料讀寫測試，使用者已提供 /exec 網址，GitHub 主站的「購物／清單」入口已改至雲端頁面；**尚未在兩支手機完成真實同步驗收**。雲端頁面的初始分頁是「購物紀錄」，若要查看待辦請再選「家庭待辦」。
+已通過程式語法與模擬資料讀寫測試，使用者已部署 Apps Script，GitHub 主站的「購物／清單」入口已改至雲端頁面。**2026-11-17 使用者確認同一筆購物紀錄在第二支手機可見，且已核對試算表 `Expenses` 存在相應紀錄。** 待辦勾選、修改與軟刪除仍待跨裝置驗收。雲端頁面的初始分頁是「購物紀錄」，若要查看待辦請再選「家庭待辦」。
