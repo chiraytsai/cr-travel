@@ -9,9 +9,11 @@
 
 ## 一次性部署操作（由 Google 帳號本人操作）
 
-1. 開啟上述 Google 試算表。
-2. 選取上方 **擴充功能 → Apps Script**，開啟與試算表綁定的 Apps Script 編輯器。
+1. 直接開啟 [Google Apps Script 官方首頁](https://script.google.com/home)，使用**可編輯此試算表的同一個 Google 帳號**登入。
+2. 點選 **新增專案（New project）**，建立**獨立 Apps Script 專案**；不需要從試算表的「擴充功能 → Apps Script」進入。
 3. 將專案命名為「北海道家庭旅遊共用工具」。
+   - 程式內已固定透過 `SpreadsheetApp.openById()` 存取既有資料表；獨立專案與綁定專案均適用。
+   - 若此處也顯示「目前無法開啟檔案」，請先檢查 Google 登入帳號是否正確，改用無痕視窗只登入該帳號，再測試 `script.google.com`。若帳號受學校或公司 Workspace 政策限制，需要管理員確認 Apps Script 服務權限。
 4. 打開 `Code.gs`；刪除預設示範內容，貼上本儲存庫 `apps-script/Code.gs` 的**完整原始碼**。
    - 若在 GitHub 複製，先按 **Raw**，再全選複製。
 5. 在左側「檔案」旁按 **＋ → HTML**，檔名輸入 **Index**。
